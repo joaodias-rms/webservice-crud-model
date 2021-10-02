@@ -32,14 +32,25 @@ router.post("/", async (req, res) => {
   }
 });
 
-router.put("/:id", (req, res) => {
-  const id = req.params.id;
-  res.json({ mensagem: `atualizar somente o id: ${id}` });
+router.put("/:id", async (req, res) => {
+  try {
+    const id = req.params.id;
+    const newMovie = req.body
+    const movie = await Movie.findByIdAndUpdate(id, newMovie)
+    res.json({error: false, movie} )
+  } catch (error) {
+    res.json({error: true, message: error.message})
+  }
 });
 
-router.delete("/:id", (req, res) => {
-  const id = req.params.id;
-  res.json({ mensage: `deletar somente o id: ${id}` });
+router.delete("/:id", async (req, res) => {
+  try {
+    const id = req.params.id;
+    await Movie.findByIdAndDelete(id)
+    res.json({error: false})
+  } catch (error) {
+    res.json({error: true, message: error.message});
+  }
 });
 
 module.exports = router;
